@@ -7,6 +7,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.trivia.controller.AppController;
 import com.example.trivia.model.Question;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +19,21 @@ public class Repository {
 
     public List<Question> getQuestions() {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> Log.d("Repo Response", "onResponse: " + response.toString()),
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+//                             Log.d("GETQ", "getQuestions: " + response.getJSONArray(i).get(1));;
+                            Question question = new Question(response.getJSONArray(i).get(0).toString(), response.getJSONArray(i).getBoolean(1));
+                            questionArrayList.add(question);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
                 error -> Log.d("Error", "onErrorResponse: Fetch failed!!"));
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest);
 
-        return null;
+        return questionArrayList;
     }
 }
