@@ -17,18 +17,18 @@ public class Repository {
 
     String url = "https://raw.githubusercontent.com/curiousily/simple-quiz/master/script/statements-data.json";
 
-    public List<Question> getQuestions() {
+    public List<Question> getQuestions(final AnswerListAsyncResponse callback) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     for (int i = 0; i < response.length(); i++) {
                         try {
-//                             Log.d("GETQ", "getQuestions: " + response.getJSONArray(i).get(1));;
                             Question question = new Question(response.getJSONArray(i).get(0).toString(), response.getJSONArray(i).getBoolean(1));
                             questionArrayList.add(question);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+                    if (null != callback) callback.processFinished(questionArrayList);
                 },
                 error -> Log.d("Error", "onErrorResponse: Fetch failed!!"));
 
