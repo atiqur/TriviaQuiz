@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import com.example.trivia.data.Repository;
 import com.example.trivia.databinding.ActivityMainBinding;
 import com.example.trivia.model.Question;
@@ -37,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding.buttonTrue.setOnClickListener(view -> {
             checkAnswer(true);
+            updateQuestion();
         });
 
         binding.buttonFalse.setOnClickListener(view -> {
             checkAnswer(false);
+            updateQuestion();
         });
 
     }
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             snackMessageId = R.string.correct_answer;
         } else {
             snackMessageId = R.string.incorrect;
+            shakeAnimation();
         }
         Snackbar.make(binding.cardView, snackMessageId, Snackbar.LENGTH_SHORT).show();
     }
@@ -64,5 +70,10 @@ public class MainActivity extends AppCompatActivity {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         binding.questionTextview.setText(question);
         updateCounter((ArrayList<Question>) questionList);
+    }
+
+    private void shakeAnimation() {
+        Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake_animation);
+        binding.cardView.setAnimation(shake);
     }
 }
