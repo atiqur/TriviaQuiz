@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         int snackMessageId = 0;
         if (userChoseCorrect == answer) {
             snackMessageId = R.string.correct_answer;
+            fadeAnimation();
         } else {
             snackMessageId = R.string.incorrect;
             shakeAnimation();
@@ -66,6 +69,32 @@ public class MainActivity extends AppCompatActivity {
         binding.textViewOutOf.setText(String.format(getString(R.string.text_formatted), currentQuestionIndex, questionArrayList.size()));
     }
 
+    private void fadeAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(300);
+        alphaAnimation.setRepeatCount(1);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+
+        binding.cardView.setAnimation(alphaAnimation);
+
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                binding.questionTextview.setTextColor(Color.GREEN);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                binding.questionTextview.setTextColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
     private void updateQuestion() {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         binding.questionTextview.setText(question);
@@ -75,5 +104,22 @@ public class MainActivity extends AppCompatActivity {
     private void shakeAnimation() {
         Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake_animation);
         binding.cardView.setAnimation(shake);
+
+        shake.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                binding.questionTextview.setTextColor(Color.RED);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                binding.questionTextview.setTextColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }
