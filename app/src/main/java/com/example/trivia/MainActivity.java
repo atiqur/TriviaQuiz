@@ -16,6 +16,7 @@ import com.example.trivia.model.Question;
 import com.example.trivia.model.Score;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         score = new Score();
+        displayCurrentScore();
+
 
         questionList = new Repository().getQuestions(questionArrayList -> {
             updateCounter(questionArrayList);
@@ -55,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
             updateQuestion();
         });
 
+    }
+
+    private void displayCurrentScore() {
+        binding.scoreText.setText(MessageFormat.format("Current Score: {0}", String.valueOf(score.getScore())));
     }
 
     private void checkAnswer(boolean userChoseCorrect) {
@@ -133,14 +140,14 @@ public class MainActivity extends AppCompatActivity {
     private void addPoint() {
         scoreCounter += 100;
         score.setScore(scoreCounter);
-        binding.scoreText.setText(String.valueOf(score.getScore()));
+        displayCurrentScore();
     }
 
     private void deductPoint() {
         if (scoreCounter > 0) {
             scoreCounter -= 100;
             score.setScore(scoreCounter);
-            binding.scoreText.setText(String.valueOf(score.getScore()));
+            displayCurrentScore();
         }
     }
 }
