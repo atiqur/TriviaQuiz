@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import com.example.trivia.data.Repository;
 import com.example.trivia.databinding.ActivityMainBinding;
 import com.example.trivia.model.Question;
+import com.example.trivia.model.Score;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
+    private int scoreCounter = 0;
+    private Score score;
     List<Question> questionList;
 
     @Override
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        score = new Score();
 
         questionList = new Repository().getQuestions(questionArrayList -> {
             updateCounter(questionArrayList);
@@ -56,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
         boolean answer = questionList.get(currentQuestionIndex).isAnswerTrue();
         int snackMessageId = 0;
         if (userChoseCorrect == answer) {
+            addPoint();
             snackMessageId = R.string.correct_answer;
             fadeAnimation();
         } else {
+            deductPoint();
             snackMessageId = R.string.incorrect;
             shakeAnimation();
         }
@@ -121,5 +128,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addPoint() {
+        scoreCounter += 100;
+        score.setScore(scoreCounter);
+        binding.scoreText.setText(String.valueOf(score.getScore()));
+    }
+
+    private void deductPoint() {
+        if (scoreCounter > 0) {
+            scoreCounter -= 100;
+            score.setScore(scoreCounter);
+            binding.scoreText.setText(String.valueOf(score.getScore()));
+        }
     }
 }
