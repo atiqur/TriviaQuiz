@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.buttonNext.setOnClickListener(view -> {
-            currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
-            updateQuestion();
+            getNextQuestion();
         });
 
         binding.buttonTrue.setOnClickListener(view -> {
@@ -63,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
             updateQuestion();
         });
 
+    }
+
+    private void getNextQuestion() {
+        currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+        updateQuestion();
     }
 
     private void displayCurrentScore() {
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 binding.questionTextview.setTextColor(Color.WHITE);
+                getNextQuestion();
             }
 
             @Override
@@ -137,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 binding.questionTextview.setTextColor(Color.WHITE);
+                getNextQuestion();
             }
 
             @Override
