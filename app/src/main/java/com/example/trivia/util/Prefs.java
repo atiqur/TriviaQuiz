@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 public class Prefs {
     private static final String HIGHEST_SCORE = "highest_score";
+    private static final String STATE = "question_index";
     private SharedPreferences preferences;
 
     public Prefs(Activity context) {
@@ -22,5 +23,13 @@ public class Prefs {
 
     public int getHighestScore() {
         return preferences.getInt(HIGHEST_SCORE, 0);
+    }
+
+    public void setState(int questionIndex) {
+        preferences.edit().putInt(STATE, questionIndex).apply();
+    }
+
+    public int getState() {
+        return preferences.getInt(STATE, 0);
     }
 }

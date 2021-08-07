@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         score = new Score();
         prefs = new Prefs(MainActivity.this);
+
+        currentQuestionIndex = prefs.getState();
         displayCurrentScore();
         displayHighestScore();
 
@@ -167,5 +169,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         prefs.saveHighestScore(score.getScore());
+        prefs.setState(currentQuestionIndex);
     }
 }
