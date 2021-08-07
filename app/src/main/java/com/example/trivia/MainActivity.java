@@ -14,6 +14,7 @@ import com.example.trivia.data.Repository;
 import com.example.trivia.databinding.ActivityMainBinding;
 import com.example.trivia.model.Question;
 import com.example.trivia.model.Score;
+import com.example.trivia.util.Prefs;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.MessageFormat;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private int currentQuestionIndex = 0;
     private int scoreCounter = 0;
     private Score score;
+    private Prefs prefs;
     List<Question> questionList;
 
     @Override
@@ -35,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         score = new Score();
+        prefs = new Prefs(MainActivity.this);
         displayCurrentScore();
+        displayHighestScore();
 
 
         questionList = new Repository().getQuestions(questionArrayList -> {
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         binding.buttonNext.setOnClickListener(view -> {
             currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
             updateQuestion();
+            prefs.saveHighestScore(scoreCounter);
         });
 
         binding.buttonTrue.setOnClickListener(view -> {
@@ -64,9 +69,13 @@ public class MainActivity extends AppCompatActivity {
         binding.scoreText.setText(MessageFormat.format("Current Score: {0}", String.valueOf(score.getScore())));
     }
 
+    private void displayHighestScore() {
+        binding.highestScoreText.setText(MessageFormat.format("Highest Score: {0}", prefs.getHighestScore()));
+    }
+
     private void checkAnswer(boolean userChoseCorrect) {
         boolean answer = questionList.get(currentQuestionIndex).isAnswerTrue();
-        int snackMessageId = 0;
+        int snackMessageId;
         if (userChoseCorrect == answer) {
             addPoint();
             snackMessageId = R.string.correct_answer;
