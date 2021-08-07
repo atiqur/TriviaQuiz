@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -48,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
             binding.questionTextview.setText(questionArrayList.get(currentQuestionIndex).getAnswer());
         });
 
-        binding.buttonNext.setOnClickListener(view -> {
-            getNextQuestion();
-        });
+        binding.buttonNext.setOnClickListener(view -> getNextQuestion());
 
         binding.buttonTrue.setOnClickListener(view -> {
             checkAnswer(true);
