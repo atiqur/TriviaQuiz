@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         binding.buttonNext.setOnClickListener(view -> {
             currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
             updateQuestion();
-            prefs.saveHighestScore(scoreCounter);
         });
 
         binding.buttonTrue.setOnClickListener(view -> {
@@ -158,5 +158,11 @@ public class MainActivity extends AppCompatActivity {
             score.setScore(scoreCounter);
             displayCurrentScore();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        prefs.saveHighestScore(score.getScore());
     }
 }
